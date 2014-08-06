@@ -10,11 +10,7 @@ sudo apt-get install $(< packages.lst)
 
 exit
 
-#ohmyssh
-wget --no-check-certificate http://install.ohmyz.sh -O - | sh -v
-
 cp terminator.config ~/.config/terminator/config
-cp zshrc ~/.zshrc
 cp vimrc ~/.vimrc
 cp htoprc ~/.config/htop/htoprc
 

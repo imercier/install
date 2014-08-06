@@ -74,3 +74,45 @@ autocmd BufRead *.pde set filetype=c
 match ErrorMsg '\s\+$'
 match ErrorMsg '/\s\+$\| \+\ze\t/'
 nnoremap rtw :%s/\s\+$//e<CR>
+
+
+"restore vim at the same line last time opened
+autocmd BufReadPost * silent! normal! g`"zv
+
+"find this f*cking cursor
+nnoremap x :set cursorline! cursorcolumn!<CR>
+
+set noswapfile
+
+"display name file
+set laststatus=2
+
+"hilight current line
+set cursorline
+hi CursorLine term=bold cterm=bold guibg=Grey40
+
+function! GoogleSearch()
+    let searchterm = getreg("g")
+    silent! exec "silent! !iceweasel \"http://google.com/search?q=" . searchterm . "\" &"
+endfunction
+vnoremap <F6> "gy<Esc>:call GoogleSearch()<CR>
+
+"absolute path displayed
+set statusline+=%F
+
+"search results appear in the middle of the screen
+set so=10
+
+"Write the old file out when switching between files.
+set autowrite
+
+" Hide the mouse cursor while typing
+set mousehide 
+
+" Puts new vsplit windows to the right of the current
+set splitright
+
+" Puts new split windows to the bottom of the current
+set splitbelow
+
+let g:snips_author = 'Ivan Mercier <ivan.mercier@nexvision.fr>'
