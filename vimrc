@@ -91,14 +91,9 @@ set laststatus=2
 set cursorline
 hi CursorLine term=bold cterm=bold guibg=Grey40
 
-function! GoogleSearch()
-    let searchterm = getreg("g")
-    silent! exec "silent! !iceweasel \"http://google.com/search?q=" . searchterm . "\" &"
-endfunction
-vnoremap <F6> "gy<Esc>:call GoogleSearch()<CR>
-
 "absolute path displayed
-set statusline+=%F
+set statusline+=%F%m%r%=%l/%L
+
 
 "search results appear in the middle of the screen
 set so=10
@@ -116,3 +111,7 @@ set splitright
 set splitbelow
 
 let g:snips_author = 'Ivan Mercier <ivan.mercier@nexvision.fr>'
+
+"google search for the word under cursor
+map ?? "zyiw \ :exec ':silent ! start http://www.google.com/search?q=";'.@z.'"'<CR>
+

@@ -12,7 +12,7 @@ alias backup='mount /backup/ && rsync -az --exclude 'tmp' --exclude=".*" --delet
 alias v='vim -O'
 alias gg='git grep'
 alias gs='git status'
-alias gb='git branch'
+alias gb='git branch -av'
 alias gd='git diff'
 alias gl='git log'
 alias gc='git checkout'
@@ -22,3 +22,21 @@ alias t='tree -C'
 alias pd='qpdfview'
 alias lsbig='du -ha | sort -n -r | head'
 
+function g() {
+    xdg-open "http://google.com/search?q=$*" > /dev/null 2>&1
+}
+
+function lucky() {  url=$(echo "http://www.google.com/search?hl=en&q=$@&btnI=I%27m+Feeling+Lucky&aq=f&oq=" | sed 's/ /+/g');
+    xdg-open $url;
+} 
+
+function vp() {
+    $@ | vim -R -
+ }
+
+ function debchange () {
+     zless "/usr/share/doc/$1/changelog.Debian.gz"
+}
+
+export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -\""
+export EDITOR='vim'
