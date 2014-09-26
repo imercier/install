@@ -1,5 +1,5 @@
 alias q='exit'
-alias up='sudo apt-get update && sudo apt-get --force-yes dist-upgrade'
+alias up='sudo apt-get update && sudo apt-get -y dist-upgrade'
 alias d='wget -c'
 alias c='clear'
 alias cl='sudo apt-get autoremove --purge; sudo apt-get purge `deborphan`'
@@ -10,7 +10,6 @@ alias df='df -h'
 alias grep='grep --color'
 alias backup='mount /backup/ && rsync -az --exclude 'tmp' --exclude=".*" --delete-after --delete-excluded ~/ /backup/ ; umount /backup/'
 alias v='vim -O'
-alias gg='git grep'
 alias gs='git status'
 alias gb='git branch -av'
 alias gd='git diff'
@@ -21,6 +20,7 @@ alias gcp='git cherry-pick'
 alias t='tree -C'
 alias pd='qpdfview'
 alias lsbig='du -ha | sort -n -r | head'
+alias ws='sudo wireshark -i eth0 -k'
 
 function g() {
     xdg-open "http://google.com/search?q=$*" > /dev/null 2>&1
@@ -34,9 +34,12 @@ function vp() {
     $@ | vim -R -
  }
 
- function debchange () {
+function debchange () {
      zless "/usr/share/doc/$1/changelog.Debian.gz"
 }
 
+function gg () {
+	git grep $* | vim -R +/$* -
+}
 export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -\""
 export EDITOR='vim'
