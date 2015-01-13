@@ -5,41 +5,84 @@ alias c='clear'
 alias cl='sudo apt-get autoremove --purge; sudo apt-get purge `deborphan`'
 alias m='mount | column -t'
 alias l='ls -lah --color'
+alias ll='ls -lah --color'
 alias h='htop'
 alias df='df -h'
 alias grep='grep --color'
 alias backup='mount /backup/ && rsync -az --exclude 'tmp' --exclude=".*" --delete-after --delete-excluded ~/ /backup/ ; umount /backup/'
 alias v='vim -O'
 alias gs='git status'
-alias gb='git branch -av'
+alias gb='git branch -a'
 alias gd='git diff'
+alias gdv='git difftool --tool=vimdiff --no-prompt'
 alias gl='git log'
+alias gll='git log --graph --oneline --decorate --all'
 alias gc='git checkout'
 alias gp='git pull'
+alias gg='git grep'
 alias gcp='git cherry-pick'
 alias t='tree -C'
-alias pd='qpdfview'
+alias pd='qpdfview > /dev/null 2>&1'
 alias lsbig='du -ha | sort -n -r | head'
-alias ws='sudo wireshark -i eth0 -k'
+alias ws='sudo wireshark -i eth0 -k > /dev/null 2>&1'
+#alias tar='tar --use-compress-program=pigz'
+alias kk='make CROSS_COMPILE=arm-none-linux-gnueabi- ARCH=arm -j9 uImage && cp arch/arm/boot/uImage ~/src/rootfs/platform-cam/images/linuximage && break_reboot && fg'
+alias in='sudo apt-get install -y'
+alias out='sudo apt-get purge'
+alias servethis="python -c 'import SimpleHTTPServer; SimpleHTTPServer.test()'"
+alias rs0='minicom -o --color=on -D /dev/ttyUSB0'
+alias rs1='minicom -o --color=on -D /dev/ttyUSB1'
+alias beep='aplay -q /usr/share/orage/sounds/Spo.wav'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias xp='xbacklight +20'
+alias xm='xbacklight -20'
+
+function vd() {
+	vimdiff <(xxd $1) <(xxd $2)
+}
 
 function g() {
     xdg-open "http://google.com/search?q=$*" > /dev/null 2>&1
 }
 
 function lucky() {  url=$(echo "http://www.google.com/search?hl=en&q=$@&btnI=I%27m+Feeling+Lucky&aq=f&oq=" | sed 's/ /+/g');
-    xdg-open $url;
+    xdg-open $url > /dev/null 2>&1
 } 
-
-function vp() {
-    $@ | vim -R -
- }
 
 function debchange () {
      zless "/usr/share/doc/$1/changelog.Debian.gz"
 }
 
-function gg () {
-	git grep $* | vim -R +/$* -
+#function gg () {
+#	git grep "$*" | vim -R +/"$*" -
+#}
+
+function f () {
+	find -iname "*$**"
 }
+
+function extract () {
+    if [ -f $1 ] ; then
+      case $1 in
+        *.tar.bz2)   tar xjf $1     ;;
+        *.tar.gz)    tar xzf -use-compress-program=pigz $1     ;;
+        *.tgz)	     tar xzf -use-compress-program=pigz $1     ;;
+        *.bz2)       pbzip2 -d $1   ;;
+        *.rar)       unrar e $1     ;;
+        *.gz)        gunzip $1      ;;
+        *.tar)       tar xf $1      ;;
+        *.tbz2)      tar xjf $1     ;;
+        *.tgz)       tar xzf $1     ;;
+        *.zip)       unzip $1       ;;
+        *.Z)         uncompress $1  ;;
+        *.7z)        7z x $1        ;;
+        *)     echo "'$1' cannot be extracted via extract()" ;;
+         esac
+     else
+         echo "'$1' is not a valid file"
+     fi
+}
+
 export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -\""
 export EDITOR='vim'

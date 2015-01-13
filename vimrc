@@ -30,9 +30,6 @@ set autoindent      " Copy indent from current line when starting a new line
                     " (typing <CR> in Insert mode or when using the "o" or "O"
                     " command).
  
-set textwidth=79    " Maximum width of text that is being inserted. A longer
-                    " line will be broken after white space to get this width.
- 
 set formatoptions=c,q,r,t " This is a sequence of letters which describes how
                     " automatic formatting is to be done.
                     "
@@ -58,13 +55,11 @@ set mouse=a         " Enable the use of the mouse.
  
 filetype plugin indent on
 syntax on
-autocmd BufRead *.pde set filetype=c
 
 "trailing whitespace:
 match ErrorMsg '\s\+$'
 match ErrorMsg '/\s\+$\| \+\ze\t/'
 nnoremap rtw :%s/\s\+$//e<CR>
-
 
 "restore vim at the same line last time opened
 autocmd BufReadPost * silent! normal! g`"zv
@@ -86,7 +81,7 @@ set statusline+=%F%m%r%=%l/%L
 
 
 "search results appear in the middle of the screen
-set so=10
+"set so=10
 
 "Write the old file out when switching between files.
 set autowrite
@@ -105,3 +100,16 @@ let g:snips_author = 'Ivan Mercier <ivan.mercier@nexvision.fr>'
 "google search for the word under cursor
 map ?? "zyiw \ :exec ':silent ! start http://www.google.com/search?q=";'.@z.'"'<CR>
 
+"Resize splits when the window is resized
+au VimResized * :wincmd =
+
+"Display Windows/Mac end of line
+set fileformats=unix
+
+" use :W to sudo-write the current buffer
+command! W w !sudo tee % > /dev/null
+
+set encoding=utf-8
+
+"search and deplace on pattern in all splits
+nnoremap ; : windo /<C-r><C-w> <Enter>
