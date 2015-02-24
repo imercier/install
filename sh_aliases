@@ -16,6 +16,7 @@ alias gb='git branch -a'
 alias gd='git diff'
 alias gdv='git difftool --tool=vimdiff --no-prompt'
 alias gl='git log'
+alias gln='git log --name-only'
 alias gll='git log --graph --oneline --decorate --all'
 alias gc='git checkout'
 alias gp='git pull'
@@ -65,7 +66,7 @@ function f () {
 function extract () {
     if [ -f $1 ] ; then
       case $1 in
-        *.tar.bz2)   tar xjf $1     ;;
+        *.tar.bz2)   tar -I lbzip2 -xf $1     ;;
         *.tar.gz)    tar xzf -use-compress-program=pigz $1     ;;
         *.tgz)	     tar xzf -use-compress-program=pigz $1     ;;
         *.bz2)       pbzip2 -d $1   ;;
