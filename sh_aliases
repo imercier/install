@@ -48,6 +48,10 @@ alias hs='history | tail -n50'
 alias naton="sudo sh -c 'iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE && echo 1 > /proc/sys/net/ipv4/ip_forward'"
 alias natoff="sudo sh -c 'iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE && echo 0 > /proc/sys/net/ipv4/ip_forward'"
 alias br='break_reboot /dev/ttyUSB0; break_reboot /dev/ttyUSB1'
+alias s='sudo !!'
+alias xp='xbacklight +10'
+alias xm='xbacklight -10'
+alias tn='ssh -2NfCT4 -D 8080 home'
 
 function vd() {
 	vimdiff <(xxd $1) <(xxd $2)
