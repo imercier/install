@@ -24,13 +24,15 @@ alias gc='git checkout'
 alias gp='git pull'
 alias gg='git grep'
 alias gcp='git cherry-pick'
+alias gr='git remote -v'
+alias gf='git fetch'
 alias ri='repo info'
 alias rs='repo sync -j8'
 alias ru='repo upload'
 alias ra='repo abandon'
 alias rp='repo prune'
 alias rd='repo diff'
-alias t='tree -Ca'
+alias t='tree -Ca -I ".git*" --noreport'
 alias pd='qpdfview > /dev/null 2>&1'
 alias lsbig='du -ha | sort -n -r | head'
 alias ws='sudo wireshark -i eth1 -k > /dev/null 2>&1 &'
@@ -52,6 +54,7 @@ alias s='sudo !!'
 alias xp='xbacklight +10'
 alias xm='xbacklight -10'
 alias tn='ssh -2NfCT4 -D 8080 home'
+alias dm='sudo dmesg -c'
 
 function vd() {
 	vimdiff <(xxd $1) <(xxd $2)
@@ -60,10 +63,6 @@ function vd() {
 function g() {
     xdg-open "http://google.com/search?q=$*" > /dev/null 2>&1
 }
-
-function lucky() {  url=$(echo "http://www.google.com/search?hl=en&q=$@&btnI=I%27m+Feeling+Lucky&aq=f&oq=" | sed 's/ /+/g');
-    xdg-open $url > /dev/null 2>&1
-} 
 
 function debchange () {
      zless "/usr/share/doc/$1/changelog.Debian.gz"
@@ -74,7 +73,7 @@ function debchange () {
 #}
 
 function f () {
-	find -iname "*$**"
+	find -iname "*$**" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$*"
 }
 
 function extract () {
