@@ -8,8 +8,8 @@ read foo
 
 mkdir -p ~/.config/terminator ~/.config/htop
 cp terminator.config ~/.config/terminator/config
-cp vimrc ~/.vimrc
+cp .vimrc ~/
 cp htoprc ~/.config/htop/htoprc
-cp sh_aliases ~/.bash_aliases
+cp .bash_aliases ~/
 
 bash
