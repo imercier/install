@@ -55,6 +55,7 @@ alias xp='xbacklight +10'
 alias xm='xbacklight -10'
 alias tn='ssh -2NfCT4 -D 8080 home'
 alias dm='sudo dmesg -c'
+alias bw='wget http://test-debit.free.fr/image.iso -O /dev/null'
 
 function vd() {
 	vimdiff <(xxd $1) <(xxd $2)
