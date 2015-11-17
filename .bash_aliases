@@ -54,6 +54,7 @@ alias s='sudo !!'
 alias xp='xbacklight +10'
 alias xm='xbacklight -10'
 alias tn='ssh -2NfCT4 -D 8080 home'
+alias trb='ssh -2NfCT4 -L 9050:127.0.0.1:9050 home'
 alias dm='sudo dmesg -c'
 alias bw='wget http://test-debit.free.fr/image.iso -O /dev/null'
 
