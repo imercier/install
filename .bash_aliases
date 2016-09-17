@@ -9,7 +9,6 @@ alias ll='ls -lah --color'
 alias h='htop'
 alias df='df -h'
 alias grep='grep --color'
-alias backup='mount /backup/ && rsync -az --exclude 'tmp' --exclude=".*" --delete-after --delete-excluded ~/ /backup/ ; umount /backup/'
 alias v='vim -O'
 alias ga='git add -A'
 alias gs='git status'
@@ -55,8 +54,9 @@ alias xp='xbacklight +10'
 alias xm='xbacklight -10'
 alias tn='ssh -2NfCT4 -D 8080 home'
 alias trb='ssh -2NfCT4 -L 9050:127.0.0.1:9050 home'
-alias dm='sudo dmesg -c'
+alias dm='sudo dmesg -cH'
 alias bw='wget http://test-debit.free.fr/image.iso -O /dev/null'
+alias sv='sudo vim -O'
 
 function vd() {
 	vimdiff <(xxd $1) <(xxd $2)
@@ -69,10 +69,6 @@ function g() {
 function debchange () {
      zless "/usr/share/doc/$1/changelog.Debian.gz"
 }
-
-#function gg () {
-#	git grep "$*" | vim -R +/"$*" -
-#}
 
 function f () {
 	find -iname "*$**" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$*"
