@@ -1,5 +1,6 @@
 alias q='exit'
 alias up='sudo apt-get update && sudo apt-get -y dist-upgrade'
+alias sv='sudo vim -O'
 alias d='wget -c'
 alias c='clear'
 alias cl='sudo apt-get autoremove --purge; sudo apt-get purge `deborphan`;sudo apt-get clean'
@@ -78,8 +79,8 @@ function extract () {
     if [ -f $1 ] ; then
       case $1 in
         *.tar.bz2)   tar -I lbzip2 -xf $1     ;;
-        *.tar.gz)    tar xzf -use-compress-program=pigz $1     ;;
-        *.tgz)	     tar xzf -use-compress-program=pigz $1     ;;
+        *.tar.gz)    pigz -dc $1 | tar xf -     ;;
+        *.tgz)    pigz -dc $1 | tar xf -     ;;
         *.bz2)       pbzip2 -d $1   ;;
         *.rar)       unrar e $1     ;;
         *.gz)        gunzip $1      ;;
