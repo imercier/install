@@ -23,6 +23,9 @@ ln -s $PWD/vimrc ~/.vimrc
 
 ln -s $PWD/aliases ~/.aliases
 
+[ -e ~/.bashrc ] && rm ~/.bashrc
+ln -s $PWD/bashrc ~/.bashrc
+
 
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 

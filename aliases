@@ -35,11 +35,8 @@ alias rp='repo prune'
 alias rd='repo diff'
 alias t='tree -Ca -I ".git*" --noreport'
 alias pd='qpdfview > /dev/null 2>&1'
-alias lsbig='du -ha | sort -n -r | head'
+alias lsbig='ls -lhS **/** | head'
 alias ws='sudo wireshark -i eth0 -k > /dev/null 2>&1 &'
-#alias tar='tar --use-compress-program=pigz'
-#alias in='sudo apt-get install -y'
-#alias out='sudo apt-get purge'
 alias servethis="python -c 'import SimpleHTTPServer; SimpleHTTPServer.test()'"
 alias rs0='minicom -o --color=on -D /dev/ttyUSB0'
 alias rs1='minicom -o --color=on -D /dev/ttyUSB1'
@@ -77,12 +74,12 @@ function f () {
 	find -iname "*$**" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$*"
 }
 
-function extract () {
+function un () {
     if [ -f $1 ] ; then
       case $1 in
         *.tar.bz2)   tar -I lbzip2 -xf $1     ;;
-        *.tar.gz)    tar xzf -use-compress-program=pigz $1     ;;
-        *.tgz)	     tar xzf -use-compress-program=pigz $1     ;;
+        *.tar.gz)    tar -I pigz -xf $1     ;;
+        *.tgz)    	 tar -I pigz -xf $1     ;;
         *.bz2)       pbzip2 -d $1   ;;
         *.rar)       unrar e $1     ;;
         *.gz)        gunzip $1      ;;
@@ -92,12 +89,15 @@ function extract () {
         *.zip)       unzip $1       ;;
         *.Z)         uncompress $1  ;;
         *.7z)        7z x $1        ;;
-        *)     echo "'$1' cannot be extracted via extract()" ;;
+        *)     echo "'$1' cannot be extracted ()" ;;
          esac
      else
          echo "'$1' is not a valid file"
      fi
 }
 
-#export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -\""
+function cz () {
+	tar -I pigz -cf "`basename $1`.tar.gz" $1
+}
+
 export EDITOR='vim'
