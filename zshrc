@@ -83,8 +83,8 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 
 # Alias definitions
-if [ -f ~/.aliases ]; then
-	. ~/.aliases
+if [ -f ~/.aliases.sh ]; then
+	. ~/.aliases.sh
 fi
 
 # make less more friendly for non-text input files, see lesspipe(1)

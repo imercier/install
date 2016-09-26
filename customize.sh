@@ -21,7 +21,7 @@ ln -s $PWD/htoprc ~/.config/htop/htoprc
 [ -e ~/.vimrc ] && rm ~/.vimrc
 ln -s $PWD/vimrc ~/.vimrc
 
-ln -s $PWD/aliases ~/.aliases
+ln -s $PWD/aliases.sh ~/.aliases.sh
 
 [ -e ~/.bashrc ] && rm ~/.bashrc
 ln -s $PWD/bashrc ~/.bashrc

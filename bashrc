@@ -81,8 +81,8 @@ fi
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # Alias definitions
-if [ -f ~/.aliases ]; then
-	. ~/.aliases
+if [ -f ~/.aliases.sh ]; then
+	. ~/.aliases.sh
 fi
 
 # enable programmable completion features (you don't need to enable
