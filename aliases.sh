@@ -1,10 +1,9 @@
 alias in='sudo apt-get install'
-alias out='sudo apt-get purge'
 alias q='exit'
 alias up='sudo apt-get update && sudo apt-get -y dist-upgrade'
 alias d='wget -c'
 alias c='clear'
-alias cl='sudo apt-get autoremove --purge; sudo apt-get purge `deborphan`'
+alias cl='sudo apt-get -y autoremove --purge; sudo apt-get -y purge `deborphan`; sudo apt-get -y clean'
 alias m='mount | column -t'
 alias l='ls -lah --color'
 alias ll='ls -lah --color'
@@ -57,7 +56,11 @@ alias dm='sudo dmesg -cH'
 alias bw='wget http://test-debit.free.fr/image.iso -O /dev/null'
 alias sv='sudo vim'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+alias saveroot='sudo fsarchiver savefs -j 4 -A /media/data/info/os/sys-`date +%F`.fsa /dev/disk/by-label/root_ssd'
 
+function out() {
+	sudo apt-get -y purge $1; sudo apt-get autoremove --purge; sudo apt-get purge `deborphan`; sudo apt-get clean
+}
 function vd() {
 	vimdiff <(xxd $1) <(xxd $2)
 }
@@ -79,6 +82,7 @@ function un () {
       case $1 in
         *.tar.bz2)   tar -I lbzip2 -xf $1     ;;
         *.tar.gz)    tar -I pigz -xf $1     ;;
+        *.tar.xz)    tar -xf $1     ;;
         *.tgz)    	 tar -I pigz -xf $1     ;;
         *.bz2)       pbzip2 -d $1   ;;
         *.rar)       unrar e $1     ;;

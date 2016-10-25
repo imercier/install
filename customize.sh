@@ -26,6 +26,8 @@ ln -s $PWD/aliases.sh ~/.aliases.sh
 [ -e ~/.bashrc ] && rm ~/.bashrc
 ln -s $PWD/bashrc ~/.bashrc
 
+echo "Dpkg::Progress-Fancy 1;
+APT::Color 1;" | sudo tee --append /etc/apt/apt.conf.d/99progressbar
 
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
