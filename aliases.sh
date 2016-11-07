@@ -1,4 +1,4 @@
-alias in='sudo apt-get install'
+alias in='sudo apt-get install -y'
 alias q='exit'
 alias up='sudo apt-get update && sudo apt-get -y dist-upgrade'
 alias d='wget -c'
