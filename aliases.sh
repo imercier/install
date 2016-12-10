@@ -57,6 +57,7 @@ alias bw='wget http://test-debit.free.fr/image.iso -O /dev/null'
 alias sv='sudo vim'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias saveroot='sudo fsarchiver savefs -j 4 -A /media/data/info/os/sys-`date +%F`.fsa /dev/disk/by-label/root_ssd'
+alias adup='sudo wget -q https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/gambling-porn-social/hosts -O /etc/dnsmasq.hosts && sudo service dnsmasq force-reload'
 
 function out() {
 	sudo apt-get -y purge $1; sudo apt-get autoremove --purge; sudo apt-get purge `deborphan`; sudo apt-get clean
@@ -102,6 +103,23 @@ function un () {
 
 function cz () {
 	tar -I pigz -cf "`basename $1`.tar.gz" $1
+}
+
+function databackup () {
+	sudo fsck -y /dev/disk/by-label/data2To_backup
+	sudo mount /dev/disk/by-label/data2To_backup /media/backup &&\
+	rsync -av --exclude 'lost+found' --exclude '.Trash-*' --delete-after /media/data/ /media/backup/ &&\
+	sync &&\
+	sudo umount /media/backup
+}
+
+function datasaveinbbb () {
+	cd /media/data/doc && \
+	rsync -av --delete-after assurance divers etudes/diplomes etudes/notes  factures finances id immo permis santé vehicule bbb:/media/sd/backup
+	cd -
+}
+function bbbsave () {
+	rsync --delete-after --rsync-path="sudo rsync" -aAX --info=progress2 --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} rsyncuser@bbb:/ /media/data/info/os/bbb-backup
 }
 
 export EDITOR='vim'
