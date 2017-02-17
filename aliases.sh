@@ -57,7 +57,7 @@ alias bw='wget http://test-debit.free.fr/image.iso -O /dev/null'
 alias sv='sudo vim'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias saveroot='sudo fsarchiver savefs -j 4 -A /media/data/info/os/sys-`date +%F`.fsa /dev/disk/by-label/root_ssd'
-alias adup='sudo wget -q https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/gambling-porn-social/hosts -O /etc/dnsmasq.hosts && sudo service dnsmasq force-reload'
+alias adup='sudo wget -q https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts -O /etc/dnsmasq.hosts && sudo service dnsmasq force-reload'
 
 function out() {
 	sudo apt-get -y purge $1; sudo apt-get autoremove --purge; sudo apt-get purge `deborphan`; sudo apt-get clean
@@ -67,38 +67,38 @@ function vd() {
 }
 
 function g() {
-    xdg-open "http://google.com/search?q=$*" > /dev/null 2>&1
+	xdg-open "http://google.com/search?q=$*" > /dev/null 2>&1
 }
 
 function debchange () {
-     zless "/usr/share/doc/$1/changelog.Debian.gz"
+	zless "/usr/share/doc/$1/changelog.Debian.gz"
 }
 
 function f () {
-	find -iname "*$**" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$*"
+find -iname "*$**" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$*"
 }
 
 function un () {
-    if [ -f $1 ] ; then
-      case $1 in
-        *.tar.bz2)   tar -I lbzip2 -xf $1     ;;
-        *.tar.gz)    tar -I pigz -xf $1     ;;
-        *.tar.xz)    tar -xf $1     ;;
-        *.tgz)    	 tar -I pigz -xf $1     ;;
-        *.bz2)       pbzip2 -d $1   ;;
-        *.rar)       unrar e $1     ;;
-        *.gz)        gunzip $1      ;;
-        *.tar)       tar xf $1      ;;
-        *.tbz2)      tar xjf $1     ;;
-        *.tgz)       tar xzf $1     ;;
-        *.zip)       unzip $1       ;;
-        *.Z)         uncompress $1  ;;
-        *.7z)        7z x $1        ;;
-        *)     echo "'$1' cannot be extracted ()" ;;
-         esac
-     else
-         echo "'$1' is not a valid file"
-     fi
+	if [ -f $1 ] ; then
+		case $1 in
+			*.tar.bz2)   tar -I lbzip2 -xf $1     ;;
+			*.tar.gz)    tar -I pigz -xf $1     ;;
+			*.tar.xz)    tar -xf $1     ;;
+			*.tgz)    	 tar -I pigz -xf $1     ;;
+			*.bz2)       pbzip2 -d $1   ;;
+			*.rar)       unrar e $1     ;;
+			*.gz)        gunzip $1      ;;
+			*.tar)       tar xf $1      ;;
+			*.tbz2)      tar xjf $1     ;;
+			*.tgz)       tar xzf $1     ;;
+			*.zip)       unzip $1       ;;
+			*.Z)         uncompress $1  ;;
+			*.7z)        7z x $1        ;;
+			*)     echo "'$1' cannot be extracted ()" ;;
+		esac
+	else
+		echo "'$1' is not a valid file"
+	fi
 }
 
 function cz () {
@@ -106,20 +106,30 @@ function cz () {
 }
 
 function databackup () {
-	sudo fsck -y /dev/disk/by-label/data2To_backup
+	function exit_backup() {
+		echo "** Trapped CTRL-C"
+		sudo umount /media/backup
+	}
+	#trap exit_backup INT
+	sudo fsck -y /dev/disk/by-label/data2To_backup_new
 	sudo mount /dev/disk/by-label/data2To_backup /media/backup &&\
-	rsync -av --exclude 'lost+found' --exclude '.Trash-*' --delete-after /media/data/ /media/backup/ &&\
-	sync &&\
-	sudo umount /media/backup
+		rsync -a --info=progress2 --exclude 'lost+found' --exclude '.Trash-*' --delete-after /media/data/ /media/backup/ &&\
+		sync &&\
+		sudo umount /media/backup
 }
 
 function datasaveinbbb () {
 	cd /media/data/doc && \
-	rsync -av --delete-after assurance divers etudes/diplomes etudes/notes  factures finances id immo permis santé vehicule bbb:/media/sd/backup
+		rsync -av --delete-after assurance divers etudes/diplomes etudes/notes  factures finances id immo permis santé vehicule bbb:/media/sd/backup
 	cd -
 }
+
 function bbbsave () {
 	rsync --delete-after --rsync-path="sudo rsync" -aAX --info=progress2 --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} rsyncuser@bbb:/ /media/data/info/os/bbb-backup
+}
+
+function kc () {
+	sudo apt-get purge $(for tag in "linux-image" "linux-headers"; do dpkg-query -W -f'${Package}\n' "$tag-[0-9]*.[0-9]*.[0-9]*" | sort -V | awk 'index($0,c){exit} //' c=$(uname -r | cut -d- -f1,2); done)
 }
 
 export EDITOR='vim'
