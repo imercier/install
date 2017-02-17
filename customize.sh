@@ -26,6 +26,8 @@ ln -s $PWD/aliases.sh ~/.aliases.sh
 [ -e ~/.bashrc ] && rm ~/.bashrc
 ln -s $PWD/bashrc ~/.bashrc
 
+git clone --recursive https://github.com/changs/slimzsh.git ~/.slimzsh
+
 echo "Dpkg::Progress-Fancy 1;
 APT::Color 1;" | sudo tee --append /etc/apt/apt.conf.d/99progressbar
 
