@@ -3,7 +3,7 @@ alias q='exit'
 alias up='sudo apt-get update && sudo apt-get -y dist-upgrade'
 alias d='wget -c'
 alias c='clear'
-alias cl='sudo apt-get -y autoremove --purge; sudo apt-get -y purge `deborphan`; sudo apt-get -y clean'
+alias cl='sudo apt-get -y autoremove --purge; sudo apt-get -y purge `deborphan`'
 alias m='mount | column -t'
 alias l='ls -lah --color'
 alias ll='ls -lah --color'
@@ -58,6 +58,11 @@ alias sv='sudo vim'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias saveroot='sudo fsarchiver savefs -j 4 -A /media/data/info/os/sys-`date +%F`.fsa /dev/disk/by-label/root_ssd'
 alias adup='sudo wget -q https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts -O /etc/dnsmasq.hosts && sudo service dnsmasq force-reload'
+
+function mkc() {
+	mkdir -p $1 && cd $1
+}
+
 
 function out() {
 	sudo apt-get -y purge $1; sudo apt-get autoremove --purge; sudo apt-get purge `deborphan`; sudo apt-get clean
