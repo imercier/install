@@ -25,7 +25,7 @@ shopt -s checkwinsize
 
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
-#shopt -s globstar
+shopt -s globstar
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -95,25 +95,3 @@ if ! shopt -oq posix; then
 		. /etc/bash_completion
 	fi
 fi
-
-function make-completion-wrapper () {
-	local function_name="$2"
-	local arg_count=$(($#-3))
-	local comp_function_name="$1"
-	shift 2
-	local function="
-	function $function_name {
-		((COMP_CWORD+=$arg_count))
-		COMP_WORDS=( "$@" \${COMP_WORDS[@]:1} )
-		"$comp_function_name"
-		return 0
-	}"
-	eval "$function"
-}
-
-make-completion-wrapper _apt_get _apt_get_install apt-get install
-complete -F _apt_get_install in
-
-make-completion-wrapper _apt_get _apt_get_purge apt-get purge
-complete -F _apt_get_purge out
-

@@ -1,4 +1,5 @@
 alias in='sudo apt-get install -y'
+alias out='sudo apt-get purge'
 alias q='exit'
 alias up='sudo apt-get update && sudo apt-get -y dist-upgrade'
 alias d='wget -c'
@@ -6,6 +7,7 @@ alias c='clear'
 alias cl='sudo apt-get -y autoremove --purge; sudo apt-get -y purge `deborphan`'
 alias m='mount | column -t'
 alias l='ls -lah --color'
+alias sl='sudo ls -lah --color'
 alias ll='ls -lah --color'
 alias h='htop'
 alias df='df -h'
@@ -15,6 +17,7 @@ alias ga='git add -A'
 alias gs='git status'
 alias gb='git branch -a'
 alias gd='git diff'
+alias gdc='git diff --cached'
 alias gdn='git diff --name-only'
 alias gdv='git difftool --tool=vimdiff --no-prompt'
 alias gl='git log'
@@ -54,19 +57,17 @@ alias tn='ssh -2NfCT4 -D 8080 home'
 alias trb='ssh -2NfCT4 -L 9050:127.0.0.1:9050 home'
 alias dm='sudo dmesg -cH'
 alias bw='wget http://test-debit.free.fr/image.iso -O /dev/null'
-alias sv='sudo vim'
+alias sv='sudo vim -O'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias saveroot='sudo fsarchiver savefs -j 4 -A /media/data/info/os/sys-`date +%F`.fsa /dev/disk/by-label/root_ssd'
 alias adup='sudo wget -q https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts -O /etc/dnsmasq.hosts && sudo service dnsmasq force-reload'
+alias sudo='sudo '
+
 
 function mkc() {
 	mkdir -p $1 && cd $1
 }
 
-
-function out() {
-	sudo apt-get -y purge $1; sudo apt-get autoremove --purge; sudo apt-get purge `deborphan`; sudo apt-get clean
-}
 function vd() {
 	vimdiff <(xxd $1) <(xxd $2)
 }
