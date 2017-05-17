@@ -1,6 +1,6 @@
-set tabstop=4       " Number of spaces that a <Tab> in the file counts for.
+set tabstop=2       " Number of spaces that a <Tab> in the file counts for.
  
-set shiftwidth=4    " Number of spaces to use for each step of (auto)indent.
+set shiftwidth=2    " Number of spaces to use for each step of (auto)indent.
  
 set showcmd         " Show (partial) command in status line.
 
@@ -53,8 +53,9 @@ set background=dark " When set to "dark", Vim will try to use colors that look
  
 set mouse=a         " Enable the use of the mouse.
  
-filetype plugin indent on
+execute pathogen#infect()
 syntax on
+filetype plugin indent on
 
 "trailing whitespace:
 match ErrorMsg '\s\+$'
@@ -113,3 +114,9 @@ set encoding=utf-8
 
 "search and deplace on pattern in all splits
 nnoremap ; : windo /<C-r><C-w> <Enter>
+
+execute pathogen#infect()
+syntax on
+filetype plugin indent on 
+
+set tabstop=2 shiftwidth=2 expandtab

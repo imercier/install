@@ -138,4 +138,10 @@ function kc () {
 	sudo apt-get purge $(for tag in "linux-image" "linux-headers"; do dpkg-query -W -f'${Package}\n' "$tag-[0-9]*.[0-9]*.[0-9]*" | sort -V | awk 'index($0,c){exit} //' c=$(uname -r | cut -d- -f1,2); done)
 }
 
+
+function vl() {
+  dir=$(realpath "$1")
+  editor "$dir"/$(ls -t $dir | head -1)
+}
+
 export EDITOR='vim'

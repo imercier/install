@@ -10,14 +10,10 @@ esac
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
-HISTCONTROL=ignoreboth
+#HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
 shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -95,3 +91,6 @@ if ! shopt -oq posix; then
 		. /etc/bash_completion
 	fi
 fi
+
+export MANPAGER="`which most`"
+PATH=$PATH:/home/user/src/Owasys/cross_compil/arm-none-linux-gnueabi/bin:/home/user/bin

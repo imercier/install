@@ -16,7 +16,7 @@ if [ ! -z "$DISPLAY" ]
 then
 	sudo apt-get -qq -y install $(cat pkg-x.list)
 	mkdir -p ~/.config/terminator
-	[ -f ~/.config/terminator.config ] && rm ~/.config/terminator.config
+	[ -f ~/.config/terminator/config ] && rm ~/.config/terminator/config
 	[ ! -h  ~/.config/terminator/config ] && ln -s $PWD/terminator.config ~/.config/terminator/config
 	sudo mkdir -p /root/.config/terminator
 	sudo [ -f /root/.config/terminator/config ] && sudo rm /root/.config/terminator/config
@@ -50,6 +50,5 @@ sudo [ ! -h /root/.bashrc ] && sudo ln -s $PWD/bashrc /root/.bashrc
 echo "Dpkg::Progress-Fancy 1;
 APT::Color 1;" | sudo tee /etc/apt/apt.conf.d/99progressbar > /dev/null
 
-source ~/.bashrc
-
 echo "Ready!"
+bash
