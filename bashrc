@@ -93,4 +93,4 @@ if ! shopt -oq posix; then
 fi
 
 export MANPAGER="`which most`"
-PATH=$PATH:/home/user/src/Owasys/cross_compil/arm-none-linux-gnueabi/bin:/home/user/bin
+PATH=$PATH:$HOME/bin

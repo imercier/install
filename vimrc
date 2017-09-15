@@ -53,7 +53,6 @@ set background=dark " When set to "dark", Vim will try to use colors that look
  
 set mouse=a         " Enable the use of the mouse.
  
-execute pathogen#infect()
 syntax on
 filetype plugin indent on
 
@@ -96,8 +95,6 @@ set splitright
 " Puts new split windows to the bottom of the current
 set splitbelow
 
-let g:snips_author = 'Ivan Mercier <ivan.mercier@nexvision.fr>'
-
 "google search for the word under cursor
 map ?? "zyiw \ :exec ':silent ! start http://www.google.com/search?q=";'.@z.'"'<CR>
 
@@ -115,7 +112,6 @@ set encoding=utf-8
 "search and deplace on pattern in all splits
 nnoremap ; : windo /<C-r><C-w> <Enter>
 
-execute pathogen#infect()
 syntax on
 filetype plugin indent on 
 

@@ -22,7 +22,7 @@ alias gdn='git diff --name-only'
 alias gdv='git difftool --tool=vimdiff --no-prompt'
 alias gl='git log'
 alias gln='git log --name-only'
-alias gll='git log --graph --oneline --decorate --all'
+alias gll='git log --graph --oneline --decorate --all --remotes=origin'
 alias gc='git checkout'
 alias gp='git pull'
 alias gg='git grep'
@@ -62,6 +62,11 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 alias saveroot='sudo fsarchiver savefs -j 4 -A /media/data/info/os/sys-`date +%F`.fsa /dev/disk/by-label/root_ssd'
 alias adup='sudo wget -q https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts -O /etc/dnsmasq.hosts && sudo service dnsmasq force-reload'
 alias sudo='sudo '
+alias n='sudo netstat -lptnu'
+
+function gls() {
+  git log --all --grep="$1"
+}
 
 
 function mkc() {
@@ -73,7 +78,7 @@ function vd() {
 }
 
 function g() {
-	xdg-open "http://google.com/search?q=$*" > /dev/null 2>&1
+	x-www-browser "http://google.com/search?q=$*" > /dev/null 2>&1
 }
 
 function debchange () {
