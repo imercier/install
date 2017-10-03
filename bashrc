@@ -91,6 +91,4 @@ if ! shopt -oq posix; then
 		. /etc/bash_completion
 	fi
 fi
-
-export MANPAGER="`which most`"
-PATH=$PATH:$HOME/bin
+export MANPAGER="most"

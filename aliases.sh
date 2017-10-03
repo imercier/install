@@ -4,7 +4,7 @@ alias q='exit'
 alias up='sudo apt-get update && sudo apt-get -y dist-upgrade'
 alias d='wget -c'
 alias c='clear'
-alias cl='sudo apt-get -y autoremove --purge; sudo apt-get -y purge `deborphan`'
+alias cl='sudo apt-get clean;sudo apt-get -y autoremove --purge; sudo apt-get -y purge `deborphan`'
 alias m='mount | column -t'
 alias l='ls -lah --color'
 alias sl='sudo ls -lah --color'
@@ -53,8 +53,8 @@ alias br='break_reboot /dev/ttyUSB0; break_reboot /dev/ttyUSB1'
 alias s='sudo !!'
 alias xp='xbacklight +10'
 alias xm='xbacklight -10'
-alias tn='ssh -2NfCT4 -D 8080 home'
-alias trb='ssh -2NfCT4 -L 9050:127.0.0.1:9050 home'
+alias tn='ssh -2NfCT4 -D 8080 srv'
+alias trb='ssh -2NfCT4 -L 9050:127.0.0.1:9050 srv'
 alias dm='sudo dmesg -cH'
 alias bw='wget http://test-debit.free.fr/image.iso -O /dev/null'
 alias sv='sudo vim -O'
@@ -62,6 +62,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 alias saveroot='sudo fsarchiver savefs -j 4 -A /media/data/info/os/sys-`date +%F`.fsa /dev/disk/by-label/root_ssd'
 alias adup='sudo wget -q https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts -O /etc/dnsmasq.hosts && sudo service dnsmasq force-reload'
 alias sudo='sudo '
+alias data2srv='duplicity /media/data/doc/ --exclude /media/data/doc/doc_old --exclude /media/data/doc/etudes/ --exclude /media/data/doc/job/ scp://srv/backup'
 alias n='sudo netstat -lptnu'
 
 function gls() {
@@ -122,21 +123,15 @@ function databackup () {
 		sudo umount /media/backup
 	}
 	#trap exit_backup INT
-	sudo fsck -y /dev/disk/by-label/data2To_backup_new
-	sudo mount /dev/disk/by-label/data2To_backup /media/backup &&\
-		rsync -a --info=progress2 --exclude 'lost+found' --exclude '.Trash-*' --delete-after /media/data/ /media/backup/ &&\
-		sync &&\
-		sudo umount /media/backup
+	sudo fsck -y /dev/disk/by-label/data_backup
+	sudo mount /media/backup &&\
+	rsync -av --info=progress2 --exclude 'lost+found' --exclude '.Trash-*' --delete-after /media/data/ /media/backup/ &&\
+	sync &&\
+	sudo umount /media/backup
 }
 
-function datasaveinbbb () {
-	cd /media/data/doc && \
-		rsync -av --delete-after assurance divers etudes/diplomes etudes/notes  factures finances id immo permis santé vehicule bbb:/media/sd/backup
-	cd -
-}
-
-function bbbsave () {
-	rsync --delete-after --rsync-path="sudo rsync" -aAX --info=progress2 --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} rsyncuser@bbb:/ /media/data/info/os/bbb-backup
+function srvsave () {
+	rsync --delete-after --rsync-path="sudo rsync" -aAX --info=progress2 --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} srv.sav:/ /media/data/info/os/srv-backup
 }
 
 function kc () {
