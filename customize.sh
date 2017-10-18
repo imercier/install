@@ -10,7 +10,7 @@ read foo
 
 PWD=`pwd`
 
-sudo apt-get -qq -y install $(cat pkg-srv.list)
+sudo apt-get -y install $(cat pkg-srv.list)
 
 if [ ! -z "$DISPLAY" ]
 then
@@ -49,6 +49,8 @@ sudo [ ! -h /root/.bashrc ] && sudo ln -s $PWD/bashrc /root/.bashrc
 #APT
 echo "Dpkg::Progress-Fancy 1;
 APT::Color 1;" | sudo tee /etc/apt/apt.conf.d/99progressbar > /dev/null
+
+sudo apt-file update
 
 echo "Ready!"
 bash

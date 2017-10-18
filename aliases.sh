@@ -1,3 +1,4 @@
+export EDITOR='vim'
 alias in='sudo apt-get install -y'
 alias out='sudo apt-get purge'
 alias q='exit'
@@ -47,8 +48,6 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias hs='history | tail -n50'
-alias naton="sudo sh -c 'iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE && echo 1 > /proc/sys/net/ipv4/ip_forward'"
-alias natoff="sudo sh -c 'iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE && echo 0 > /proc/sys/net/ipv4/ip_forward'"
 alias br='break_reboot /dev/ttyUSB0; break_reboot /dev/ttyUSB1'
 alias s='sudo !!'
 alias xp='xbacklight +10'
@@ -64,11 +63,10 @@ alias adup='sudo wget -q https://raw.githubusercontent.com/StevenBlack/hosts/mas
 alias sudo='sudo '
 alias data2srv='duplicity /media/data/doc/ --exclude /media/data/doc/doc_old --exclude /media/data/doc/etudes/ --exclude /media/data/doc/job/ scp://srv/backup'
 alias n='sudo netstat -lptnu'
-
-function gls() {
-  git log --all --grep="$1"
-}
-
+alias fm='flashmodem -b $(ls -t ~/src/AGX/AGX/Out/AGX*354*.bin | head -1) -t /dev/ttymodem && screen /dev/ttymodem 115200'
+alias fme='flashmodem -e -b $(ls -t ~/src/AGX/AGX/Out/AGX*354*.bin | head -1) -t /dev/ttymodem && screen /dev/ttymodem 115200'
+alias svm='screen rdesktop -u i.mercier -g 1920x1024 win7'
+alias natoff="sudo sh -c 'iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE && echo 0 > /proc/sys/net/ipv4/ip_forward'"
 
 function mkc() {
 	mkdir -p $1 && cd $1
@@ -138,7 +136,6 @@ function kc () {
 	sudo apt-get purge $(for tag in "linux-image" "linux-headers"; do dpkg-query -W -f'${Package}\n' "$tag-[0-9]*.[0-9]*.[0-9]*" | sort -V | awk 'index($0,c){exit} //' c=$(uname -r | cut -d- -f1,2); done)
 }
 
-
 function vl() {
   dir=$(realpath "$1")
   editor "$dir"/$(ls -t $dir | head -1)
@@ -149,4 +146,18 @@ function la() {
   echo "$dir"/$(ls -t $dir | head -1)
 }
 
-export EDITOR='vim'
+function sms() {
+  num="$1"
+  msg="$2"
+  curl -X POST http://pi/RaspiSMS/smsAPI/ -d "email=api@api.org&password=api&numbers=$num" --data-urlencode "text=$msg"
+}
+
+function naton() {
+  if=$1
+  sudo sh -c 'iptables -t nat -A POSTROUTING -o "$if" -j MASQUERADE && echo 1 > /proc/sys/net/ipv4/ip_forward'
+}
+  
+function gls() {
+  git log --all --grep="$1"
+}
+

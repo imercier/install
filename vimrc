@@ -77,7 +77,7 @@ set cursorline
 hi CursorLine term=bold cterm=bold guibg=Grey40
 
 "absolute path displayed
-set statusline+=%F%m%r%=%l/%L
+set statusline+=%F%m%r%=%l/%L-%c
 
 
 "search results appear in the middle of the screen
