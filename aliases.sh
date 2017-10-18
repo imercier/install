@@ -144,4 +144,9 @@ function vl() {
   editor "$dir"/$(ls -t $dir | head -1)
 }
 
+function la() {
+  dir=$(realpath "$1")
+  echo "$dir"/$(ls -t $dir | head -1)
+}
+
 export EDITOR='vim'

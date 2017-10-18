@@ -111,8 +111,3 @@ set encoding=utf-8
 
 "search and deplace on pattern in all splits
 nnoremap ; : windo /<C-r><C-w> <Enter>
-
-syntax on
-filetype plugin indent on 
-
-set tabstop=2 shiftwidth=2 expandtab
