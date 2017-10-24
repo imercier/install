@@ -1,7 +1,4 @@
-set tabstop=2       " Number of spaces that a <Tab> in the file counts for.
- 
-set shiftwidth=2    " Number of spaces to use for each step of (auto)indent.
- 
+set tabstop=2 shiftwidth=2 expandtab
 set showcmd         " Show (partial) command in status line.
 
 
@@ -111,3 +108,4 @@ set encoding=utf-8
 
 "search and deplace on pattern in all splits
 nnoremap ; : windo /<C-r><C-w> <Enter>
+match Ignore /\r$/
