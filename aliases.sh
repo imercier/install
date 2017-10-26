@@ -10,7 +10,7 @@ alias m='mount | column -t'
 alias l='ls -lah --color'
 alias sl='sudo ls -lah --color'
 alias ll='ls -lah --color'
-alias ht='htop'
+alias h='htop'
 alias df='df -h'
 alias grep='grep --color'
 alias v='vim -O'
@@ -67,7 +67,6 @@ alias fm='flashmodem -b $(ls -t ~/src/AGX/AGX/Out/AGX*354*.bin | head -1) -t /de
 alias fme='flashmodem -e -b $(ls -t ~/src/AGX/AGX/Out/AGX*354*.bin | head -1) -t /dev/ttymodem && screen /dev/ttymodem 115200'
 alias svm='screen rdesktop -u i.mercier -g 1920x1024 win7'
 alias natoff="sudo sh -c 'iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE && echo 0 > /proc/sys/net/ipv4/ip_forward'"
-alias h='function hdi(){ howdoi $* -c -n 5; }; hdi'
 
 function mkc() {
 	mkdir -p $1 && cd $1
