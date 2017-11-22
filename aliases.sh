@@ -52,7 +52,7 @@ alias br='break_reboot /dev/ttyUSB0; break_reboot /dev/ttyUSB1'
 alias s='sudo !!'
 alias xp='xbacklight +10'
 alias xm='xbacklight -10'
-alias tn='ssh -2NfCT4 -D 8080 srv'
+alias tn='ssh -2NfCT4q -D 8080 srv'
 alias trb='ssh -2NfCT4 -L 9050:127.0.0.1:9050 srv'
 alias dm='sudo dmesg -cH'
 alias bw='wget http://test-debit.free.fr/image.iso -O /dev/null'
@@ -67,6 +67,7 @@ alias fm='flashmodem -b $(ls -t ~/src/AGX/AGX/Out/AGX*354*.bin | head -1) -t /de
 alias fme='flashmodem -e -b $(ls -t ~/src/AGX/AGX/Out/AGX*354*.bin | head -1) -t /dev/ttymodem && screen /dev/ttymodem 115200'
 alias svm='screen rdesktop -u i.mercier -g 1920x1024 win7'
 alias natoff="sudo sh -c 'iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE && echo 0 > /proc/sys/net/ipv4/ip_forward'"
+alias mm='sudo mount /media/partage/ && sudo mount /media/dev/ && sudo mount /media/ulysse/'
 
 function mkc() {
 	mkdir -p $1 && cd $1
@@ -160,4 +161,15 @@ function naton() {
 function gls() {
   git log --all --grep="$1"
 }
+
+function ipfwd() {
+  src=$1
+  dst=$2
+  port=$3
+  sudo iptables -t nat -A PREROUTING -p tcp --dport $port -j DNAT --to-destination $dst:$port
+  sudo iptables -t nat -A POSTROUTING -p tcp -d $dst --dport $port -j SNAT --to-source $src
+  sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'
+}
+
+
 
