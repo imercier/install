@@ -41,6 +41,9 @@ sudo [ ! -h /root/.vimrc ] && sudo ln -s $PWD/vimrc /root/.vimrc
 [ ! -h ~/.aliases.sh ] && ln -s $PWD/aliases.sh ~/.aliases.sh
 sudo [ ! -h /root/.aliases.sh ] && sudo ln -s $PWD/aliases.sh /root/.aliases.sh
 
+[ ! -h ~/.bash_command_timer.sh ] && ln -s $PWD/bash_command_timer.sh ~/.bash_command_timer.sh
+sudo [ ! -h /root/.bash_command_timer.sh ] && sudo ln -s $PWD/bash_command_timer.sh /root/.bash_command_timer.sh
+
 [ -f ~/.bashrc ] && rm ~/.bashrc
 [ ! -h ~/.bashrc ] && ln -s $PWD/bashrc ~/.bashrc
 sudo [ -f /root/.bashrc ] && sudo rm /root/.bashrc

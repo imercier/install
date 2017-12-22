@@ -92,5 +92,6 @@ if ! shopt -oq posix; then
 	fi
 fi
 export MANPAGER="most"
-#export http_proxy=socks5h://127.0.0.1:8080
-#export https_proxy=socks5h://127.0.0.1:8080
+if [ -f ~/.bash_command_timer.sh ]; then
+	. ~/.bash_command_timer.sh
+fi

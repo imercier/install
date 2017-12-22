@@ -26,7 +26,7 @@ alias gln='git log --name-only'
 alias gll='git log --graph --oneline --decorate --all --remotes=origin'
 alias gc='git checkout'
 alias gp='git pull'
-alias gg='git grep'
+alias gg='git grep -i'
 alias gcp='git cherry-pick'
 alias gr='git remote -v'
 alias gf='git fetch'
@@ -64,25 +64,26 @@ alias sudo='sudo '
 alias data2srv='duplicity /media/data/doc/ --exclude /media/data/doc/doc_old --exclude /media/data/doc/etudes/ --exclude /media/data/doc/job/ scp://srv/backup'
 alias n='sudo netstat -lptnu'
 alias fm='flashmodem -b $(ls -t ~/src/AGX/AGX/Out/AGX*354*.bin | head -1) -t /dev/ttymodem && screen /dev/ttymodem 115200'
-alias fme='flashmodem -e -b $(ls -t ~/src/AGX/AGX/Out/AGX*354*.bin | head -1) -t /dev/ttymodem && screen /dev/ttymodem 115200'
+alias fme='flashmodem -e -b $(ls -t ~/src/AGX/AGX/Out/AGX*54*.bin | head -1) -t /dev/ttymodem && screen /dev/ttymodem 115200'
 alias svm='screen rdesktop -u i.mercier -g 1920x1024 win7'
 alias natoff="sudo sh -c 'iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE && echo 0 > /proc/sys/net/ipv4/ip_forward'"
 alias mm='sudo mount /media/partage/ && sudo mount /media/dev/ && sudo mount /media/ulysse/'
+alias vm='VBoxManage startvm win7 --type headless'
 
 function mkc() {
-	mkdir -p $1 && cd $1
+  mkdir -p $1 && cd $1
 }
 
 function vd() {
-	vimdiff <(xxd $1) <(xxd $2)
+  vimdiff <(xxd $1) <(xxd $2)
 }
 
 function g() {
-	x-www-browser "http://google.com/search?q=$*" > /dev/null 2>&1
+  x-www-browser "http://google.com/search?q=$*" > /dev/null 2>&1
 }
 
 function debchange () {
-	zless "/usr/share/doc/$1/changelog.Debian.gz"
+  zless "/usr/share/doc/$1/changelog.Debian.gz"
 }
 
 function f () {
@@ -90,51 +91,52 @@ find -iname "*$**" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$*"
 }
 
 function un () {
-	if [ -f $1 ] ; then
-		case $1 in
-			*.tar.bz2)   tar -I lbzip2 -xf $1     ;;
-			*.tar.gz)    tar -I pigz -xf $1     ;;
-			*.tar.xz)    tar -xf $1     ;;
-			*.tgz)    	 tar -I pigz -xf $1     ;;
-			*.bz2)       pbzip2 -d $1   ;;
-			*.rar)       unrar e $1     ;;
-			*.gz)        gunzip $1      ;;
-			*.tar)       tar xf $1      ;;
-			*.tbz2)      tar xjf $1     ;;
-			*.tgz)       tar xzf $1     ;;
-			*.zip)       unzip $1       ;;
-			*.Z)         uncompress $1  ;;
-			*.7z)        7z x $1        ;;
-			*)     echo "'$1' cannot be extracted ()" ;;
-		esac
-	else
-		echo "'$1' is not a valid file"
-	fi
+  if [ -f $1 ] ; then
+    case $1 in
+      *.tar.bz2)   tar -I lbzip2 -xf $1     ;;
+      *.tar.gz)    tar -I pigz -xf $1     ;;
+      *.tar.xz)    tar -xf $1     ;;
+      *.tgz)    	 tar -I pigz -xf $1     ;;
+      *.bz2)       pbzip2 -d $1   ;;
+      *.rar)       unrar e $1     ;;
+      *.gz)        gunzip $1      ;;
+      *.tar)       tar xf $1      ;;
+      *.tbz2)      tar xjf $1     ;;
+      *.tgz)       tar xzf $1     ;;
+      *.zip)       unzip $1       ;;
+      *.Z)         uncompress $1  ;;
+      *.7z)        7z x $1        ;;
+      *.lzma)      lzma -d -k $1  ;;
+      *)     echo "'$1' cannot be extracted ()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
 }
 
 function cz () {
-	tar -I pigz -cf "`basename $1`.tar.gz" $1
+  tar -I pigz -cf "`basename $1`.tar.gz" $1
 }
 
 function databackup () {
-	function exit_backup() {
-		echo "** Trapped CTRL-C"
-		sudo umount /media/backup
-	}
-	#trap exit_backup INT
-	sudo fsck -y /dev/disk/by-label/data_backup
-	sudo mount /media/backup &&\
-	rsync -av --info=progress2 --exclude 'lost+found' --exclude '.Trash-*' --delete-after /media/data/ /media/backup/ &&\
-	sync &&\
-	sudo umount /media/backup
+  function exit_backup() {
+    echo "** Trapped CTRL-C"
+    sudo umount /media/backup
+  }
+  #trap exit_backup INT
+  sudo fsck -y /dev/disk/by-label/data_backup
+  sudo mount /media/backup &&\
+  rsync -av --info=progress2 --exclude 'lost+found' --exclude '.Trash-*' --delete-after /media/data/ /media/backup/ &&\
+  sync &&\
+  sudo umount /media/backup
 }
 
 function srvsave () {
-	rsync --delete-after --rsync-path="sudo rsync" -aAX --info=progress2 --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} srv.sav:/ /media/data/info/os/srv-backup
+  rsync --delete-after --rsync-path="sudo rsync" -aAX --info=progress2 --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} srv.sav:/ /media/data/info/os/srv-backup
 }
 
 function kc () {
-	sudo apt-get purge $(for tag in "linux-image" "linux-headers"; do dpkg-query -W -f'${Package}\n' "$tag-[0-9]*.[0-9]*.[0-9]*" | sort -V | awk 'index($0,c){exit} //' c=$(uname -r | cut -d- -f1,2); done)
+  sudo apt-get purge $(for tag in "linux-image" "linux-headers"; do dpkg-query -W -f'${Package}\n' "$tag-[0-9]*.[0-9]*.[0-9]*" | sort -V | awk 'index($0,c){exit} //' c=$(uname -r | cut -d- -f1,2); done)
 }
 
 function vl() {
@@ -170,6 +172,3 @@ function ipfwd() {
   sudo iptables -t nat -A POSTROUTING -p tcp -d $dst --dport $port -j SNAT --to-source $src
   sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'
 }
-
-
-
