@@ -79,7 +79,7 @@ function vd() {
 }
 
 function g() {
-  x-www-browser "http://google.com/search?q=$*" > /dev/null 2>&1
+  x-www-browser "http://google.com/search?q=$*" > /dev/null 2>&1 &
 }
 
 function debchange () {
@@ -87,7 +87,7 @@ function debchange () {
 }
 
 function f () {
-find -iname "*$**" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$*"
+find -type f -iname "*$**" -or -type d -iname "*$**" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$*"
 }
 
 function un () {

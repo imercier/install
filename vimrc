@@ -109,5 +109,3 @@ set encoding=utf-8
 "search and deplace on pattern in all splits
 nnoremap ; : windo /<C-r><C-w> <Enter>
 match Ignore /\r$/
-
-execute pathogen#infect()
