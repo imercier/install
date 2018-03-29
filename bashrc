@@ -95,3 +95,7 @@ export MANPAGER="most"
 if [ -f ~/.bash_command_timer.sh ]; then
 	. ~/.bash_command_timer.sh
 fi
+
+if [ -n "$DISPLAY" ]; then
+  xset b off
+fi

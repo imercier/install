@@ -52,7 +52,7 @@ BCT_COLOR='34'
 # pattern.
 #
 # If empty, disables printing of current time.
-BCT_TIME_FORMAT='%b %d %I:%M%p'
+BCT_TIME_FORMAT='%b %d %R'
 
 # Whether to print command timings up to millisecond precision.
 #

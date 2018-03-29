@@ -40,7 +40,7 @@ alias t='tree -Ca -I ".git*" --noreport'
 alias pd='qpdfview > /dev/null 2>&1'
 alias lsbig='ls -lhS **/** | head'
 alias ws='sudo wireshark -i eth0 -k > /dev/null 2>&1 &'
-alias servethis="python -c 'import SimpleHTTPServer; SimpleHTTPServer.test()'"
+alias servethis="python2.7 -c 'import SimpleHTTPServer; SimpleHTTPServer.test()'"
 alias rs0='minicom -o --color=on -D /dev/ttyUSB0'
 alias rs1='minicom -o --color=on -D /dev/ttyUSB1'
 alias beep='aplay -q /usr/share/orage/sounds/Spo.wav > /dev/null 2>&1'
@@ -63,10 +63,6 @@ alias adup='sudo wget -q https://raw.githubusercontent.com/StevenBlack/hosts/mas
 alias sudo='sudo '
 alias data2srv='duplicity /media/data/doc/ --exclude /media/data/doc/doc_old --exclude /media/data/doc/etudes/ --exclude /media/data/doc/job/ scp://srv/backup'
 alias n='sudo netstat -lptnu'
-alias fm='flashmodem -b $(ls -t ~/src/AGX/AGX/Out/AGX*354*.bin | head -1) -t /dev/ttymodem && screen /dev/ttymodem 115200'
-alias fme='flashmodem -e -b $(ls -t ~/src/AGX/AGX/Out/AGX*54*.bin | head -1) -t /dev/ttymodem && screen /dev/ttymodem 115200'
-alias svm='screen rdesktop -u i.mercier -g 1920x1024 win7'
-alias natoff="sudo sh -c 'iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE && echo 0 > /proc/sys/net/ipv4/ip_forward'"
 alias mm='sudo mount /media/partage/ && sudo mount /media/dev/ && sudo mount /media/ulysse/'
 alias vm='VBoxManage startvm win7 --type headless'
 
@@ -126,9 +122,9 @@ function databackup () {
   #trap exit_backup INT
   sudo fsck -y /dev/disk/by-label/data_backup
   sudo mount /media/backup &&\
-  rsync -av --info=progress2 --exclude 'lost+found' --exclude '.Trash-*' --delete-after /media/data/ /media/backup/ &&\
-  sync &&\
-  sudo umount /media/backup
+    rsync -av --info=progress2 --exclude 'lost+found' --exclude '.Trash-*' --delete-after /media/data/ /media/backup/ &&\
+    sync &&\
+    sudo umount /media/backup
 }
 
 function srvsave () {
@@ -156,10 +152,13 @@ function sms() {
 }
 
 function naton() {
-  if=$1
-  sudo sh -c 'iptables -t nat -A POSTROUTING -o "$if" -j MASQUERADE && echo 1 > /proc/sys/net/ipv4/ip_forward'
+  sudo iptables -t nat -A POSTROUTING -o "$1" -j MASQUERADE && echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
 }
-  
+
+function natoff() {
+  sudo iptables -t nat -D POSTROUTING -o "$1" -j MASQUERADE && echo 0 | sudo tee /proc/sys/net/ipv4/ip_forward
+}
+
 function gls() {
   git log --all --grep="$1"
 }
