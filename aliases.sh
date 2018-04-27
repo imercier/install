@@ -40,7 +40,6 @@ alias t='tree -Ca -I ".git*" --noreport'
 alias pd='qpdfview > /dev/null 2>&1'
 alias lsbig='ls -lhS **/** | head'
 alias ws='sudo wireshark -i eth0 -k > /dev/null 2>&1 &'
-alias servethis="python2.7 -c 'import SimpleHTTPServer; SimpleHTTPServer.test()'"
 alias rs0='minicom -o --color=on -D /dev/ttyUSB0'
 alias rs1='minicom -o --color=on -D /dev/ttyUSB1'
 alias beep='aplay -q /usr/share/orage/sounds/Spo.wav > /dev/null 2>&1'
@@ -54,7 +53,7 @@ alias xp='xbacklight +10'
 alias xm='xbacklight -10'
 alias tn='ssh -2NfCT4q -D 8080 srv'
 alias trb='ssh -2NfCT4 -L 9050:127.0.0.1:9050 srv'
-alias dm='sudo dmesg -cH'
+alias dm='sudo dmesg -cHw'
 alias bw='wget http://test-debit.free.fr/image.iso -O /dev/null'
 alias sv='sudo vim -O'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
@@ -65,6 +64,12 @@ alias data2srv='duplicity /media/data/doc/ --exclude /media/data/doc/doc_old --e
 alias n='sudo netstat -lptnu'
 alias mm='sudo mount /media/partage/ && sudo mount /media/dev/ && sudo mount /media/ulysse/'
 alias vm='VBoxManage startvm win7 --type headless'
+alias si='sudo ifconfig'
+alias mn='sshfs nas:/data /media/nas/'
+
+function PushDateUtc() {
+  ssh $1 sudo date -us @`( date -u +"%s" )`
+}
 
 function mkc() {
   mkdir -p $1 && cd $1
@@ -170,4 +175,10 @@ function ipfwd() {
   sudo iptables -t nat -A PREROUTING -p tcp --dport $port -j DNAT --to-destination $dst:$port
   sudo iptables -t nat -A POSTROUTING -p tcp -d $dst --dport $port -j SNAT --to-source $src
   sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'
+}
+
+function servethis() {
+  IP=$(ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  -d'/')
+  echo "http://$IP:8000"
+  python2.7 -c 'import SimpleHTTPServer; SimpleHTTPServer.test()'
 }
