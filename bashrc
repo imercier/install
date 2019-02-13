@@ -81,6 +81,9 @@ if [ -f ~/.aliases.sh ]; then
 	. ~/.aliases.sh
 fi
 
+if [ -f ~/.bash_command_timer.sh ]; then
+	. ~/.bash_command_timer.sh
+fi
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -92,10 +95,9 @@ if ! shopt -oq posix; then
 	fi
 fi
 export MANPAGER="most"
-if [ -f ~/.bash_command_timer.sh ]; then
-	. ~/.bash_command_timer.sh
-fi
 
 if [ -n "$DISPLAY" ]; then
   xset b off
 fi
+
+PATH=$PATH:"$HOME"/bin

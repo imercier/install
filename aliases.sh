@@ -26,11 +26,11 @@ alias gl='git log'
 alias gln='git log --name-only'
 alias gll='git log --graph --oneline --decorate --all --remotes=origin'
 alias gc='git checkout'
-alias gp='git pull'
+alias gp='git pull --recurse-submodules'
 alias gg='git grep -i'
 alias gcp='git cherry-pick'
 alias gr='git remote -v'
-alias gf='git fetch'
+alias gf='git fetch -p'
 alias ri='repo info'
 alias rs='repo sync -j8'
 alias ru='repo upload'
@@ -65,13 +65,15 @@ alias n='sudo netstat -lptnu'
 alias mm='sudo mount /media/partage/ && sudo mount /media/dev/ && sudo mount /media/ulysse/'
 alias vm='VBoxManage startvm win7 --type headless'
 alias si='sudo ifconfig'
-alias mn='sshfs nas:/data /media/nas/'
-alias mnw='sshfs naswww:/data /media/nas/'
 alias afs='apt-file search'
 alias b='watch -n1'
+alias pt='ping -c1 google.de'
+alias xr='xrandr --output HDMI-1 --same-as eDP-1 --output eDP-1 --mode 1920x1080'
+alias cc='sync; echo 3 | sudo tee /proc/sys/vm/drop_caches'
+alias dds='sudo pkill -USR1 dd'
 
 function PushDateUtc() {
-  ssh $1 sudo date -us @`( date -u +"%s" )`
+  ssh $1 date -us @`( date -u +"%s" )`
 }
 
 function mkc() {
@@ -184,4 +186,8 @@ function servethis() {
   IP=$(ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  -d'/')
   echo "http://$IP:8000"
   python2.7 -c 'import SimpleHTTPServer; SimpleHTTPServer.test()'
+}
+
+function re() {
+  sudo ifconfig $1 down; sudo ifconfig $1 up
 }

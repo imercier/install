@@ -1,4 +1,6 @@
-set tabstop=2 shiftwidth=2 expandtab
+"set tabstop=2 shiftwidth=2 expandtab
+set noet ci pi sts=0 sw=2 ts=2 " Tabulation are tabs
+
 set showcmd         " Show (partial) command in status line.
 
 
@@ -6,27 +8,27 @@ set showmatch       " When a bracket is inserted, briefly jump to the matching
                     " one. The jump is only done if the match can be seen on the
                     " screen. The time to show the match can be set with
                     " 'matchtime'.
- 
+
 set hlsearch        " When there is a previous search pattern, highlight all
                     " its matches.
- 
+
 set incsearch       " While typing a search command, show immediately where the
                     " so far typed pattern matches.
- 
+
 set ignorecase      " Ignore case in search patterns.
- 
+
 set smartcase       " Override the 'ignorecase' option if the search pattern
                     " contains upper case characters.
- 
+
 set backspace=2     " Influences the working of <BS>, <Del>, CTRL-W
                     " and CTRL-U in Insert mode. This is a list of items,
                     " separated by commas. Each item allows a way to backspace
                     " over something.
- 
+
 set autoindent      " Copy indent from current line when starting a new line
                     " (typing <CR> in Insert mode or when using the "o" or "O"
                     " command).
- 
+
 set formatoptions=c,q,r,t " This is a sequence of letters which describes how
                     " automatic formatting is to be done.
                     "
@@ -36,20 +38,20 @@ set formatoptions=c,q,r,t " This is a sequence of letters which describes how
                     "           the current comment leader automatically.
                     " q         Allow formatting of comments with "gq".
                     " r         Automatically insert the current comment leader
-                    "           after hitting <Enter> in Insert mode. 
+                    "           after hitting <Enter> in Insert mode.
                     " t         Auto-wrap text using textwidth (does not apply
                     "           to comments)
- 
+
 set ruler           " Show the line and column number of the cursor position,
                     " separated by a comma.
- 
+
 set background=dark " When set to "dark", Vim will try to use colors that look
                     " good on a dark background. When set to "light", Vim will
                     " try to use colors that look good on a light background.
                     " Any other value is illegal.
- 
+
 set mouse=a         " Enable the use of the mouse.
- 
+
 syntax on
 filetype plugin indent on
 
@@ -84,7 +86,7 @@ set statusline+=%F%m%r%=%l/%L-%c
 set autowrite
 
 " Hide the mouse cursor while typing
-set mousehide 
+set mousehide
 
 " Puts new vsplit windows to the right of the current
 set splitright
@@ -109,3 +111,8 @@ set encoding=utf-8
 "search and deplace on pattern in all splits
 nnoremap ; : windo /<C-r><C-w> <Enter>
 match Ignore /\r$/
+
+"Search for visually selected text
+vnoremap // y/<C-R>"<CR>
+
+autocmd BufNewFile,BufRead *.fbs set syntax=idl
