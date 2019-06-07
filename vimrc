@@ -1,5 +1,6 @@
-"set tabstop=2 shiftwidth=2 expandtab
-set noet ci pi sts=0 sw=2 ts=2 " Tabulation are tabs
+set expandtab
+set shiftwidth=2
+set softtabstop=2
 
 set showcmd         " Show (partial) command in status line.
 

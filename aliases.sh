@@ -25,7 +25,6 @@ alias gdv='git difftool --tool=vimdiff --no-prompt'
 alias gl='git log'
 alias gln='git log --name-only'
 alias gll='git log --graph --oneline --decorate --all --remotes=origin'
-alias gc='git checkout'
 alias gp='git pull --recurse-submodules'
 alias gg='git grep -i'
 alias gcp='git cherry-pick'
@@ -62,7 +61,6 @@ alias adup='sudo wget -q https://raw.githubusercontent.com/StevenBlack/hosts/mas
 alias sudo='sudo '
 alias data2srv='duplicity /media/data/doc/ --exclude /media/data/doc/doc_old --exclude /media/data/doc/etudes/ --exclude /media/data/doc/job/ scp://srv/backup'
 alias n='sudo netstat -lptnu'
-alias mm='sudo mount /media/partage/ && sudo mount /media/dev/ && sudo mount /media/ulysse/'
 alias vm='VBoxManage startvm win7 --type headless'
 alias si='sudo ifconfig'
 alias afs='apt-file search'
@@ -190,4 +188,14 @@ function servethis() {
 
 function re() {
   sudo ifconfig $1 down; sudo ifconfig $1 up
+}
+
+function gsr() { # git search and replace recursively in text file
+	old=$1
+	new=$2
+	git grep -I -l "$old" | xargs sed -i s@"$old"@"$new"@g
+}
+
+function gc() {
+  git clone --recurse-submodules -j8 "$1" && cd "$(basename "$1" .git)"
 }

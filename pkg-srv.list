@@ -1,1 +1,1 @@
-tree git-core vim bash-completion htop iotop iperf pv nmap curl deborphan binutils man manpages-fr manpages-fr-dev most ntp apt-file net-tools screen bc pigz lbzip2 lzma jq jpegoptim shellcheck dos2unix whois alsa-utils traceroute cloc nethogs dnsutils tshark ascii exuberant-ctags ethtool httpie
+tree git vim bash-completion htop iotop iperf pv nmap curl deborphan binutils man-db most ntp apt-file net-tools screen bc pigz lbzip2 lzma jq jpegoptim shellcheck dos2unix whois alsa-utils traceroute cloc nethogs dnsutils tshark ascii exuberant-ctags ethtool httpie apt-file
