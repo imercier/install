@@ -81,6 +81,10 @@ if [ -f ~/.aliases.sh ]; then
 	. ~/.aliases.sh
 fi
 
+if [ -f ~/.proaliases.sh ]; then
+	. ~/.proaliases.sh
+fi
+
 if [ -f ~/.bash_command_timer.sh ]; then
 	. ~/.bash_command_timer.sh
 fi

@@ -3,7 +3,6 @@ alias in='sudo apt-get install -y'
 alias out='sudo apt-get purge'
 alias q='exit'
 alias up='sudo apt-get update && sudo apt-get -y dist-upgrade'
-alias d='wget -c'
 alias c='clear'
 alias cl='sudo apt-get clean;sudo apt-get -y autoremove --purge; sudo apt-get -y purge `deborphan`'
 alias m='mount | column -t'
@@ -22,6 +21,7 @@ alias gd='git diff'
 alias gdc='git diff --cached'
 alias gdn='git diff --name-only'
 alias gdv='git difftool --tool=vimdiff --no-prompt'
+alias gdvc='git difftool --tool=vimdiff --no-prompt --cached'
 alias gl='git log'
 alias gln='git log --name-only'
 alias gll='git log --graph --oneline --decorate --all --remotes=origin'
@@ -29,7 +29,7 @@ alias gp='git pull --recurse-submodules'
 alias gg='git grep -i'
 alias gcp='git cherry-pick'
 alias gr='git remote -v'
-alias gf='git fetch -p'
+alias gf='git fetch --all -p'
 alias ri='repo info'
 alias rs='repo sync -j8'
 alias ru='repo upload'
@@ -198,4 +198,12 @@ function gsr() { # git search and replace recursively in text file
 
 function gc() {
   git clone --recurse-submodules -j8 "$1" && cd "$(basename "$1" .git)"
+}
+
+function vs() {
+  strings "$1" | vim -R -
+}
+
+function d() {
+	wget -c "$1"
 }
