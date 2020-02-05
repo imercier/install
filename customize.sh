@@ -49,6 +49,9 @@ sudo [ ! -h /root/.bash_command_timer.sh ] && sudo ln -s $PWD/bash_command_timer
 sudo [ -f /root/.bashrc ] && sudo rm /root/.bashrc
 sudo [ ! -h /root/.bashrc ] && sudo ln -s $PWD/bashrc /root/.bashrc
 
+#INPUTRC
+sudo cp inputrc /etc/
+
 #APT
 echo "Dpkg::Progress-Fancy 1;
 APT::Color 1;" | sudo tee /etc/apt/apt.conf.d/99progressbar > /dev/null

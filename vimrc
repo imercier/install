@@ -1,4 +1,6 @@
-set autoindent noexpandtab tabstop=2 shiftwidth=2
+set expandtab
+set tabstop=2
+set shiftwidth=2
 
 set showcmd         " Show (partial) command in status line.
 

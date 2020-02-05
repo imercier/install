@@ -54,7 +54,8 @@ alias xm='xbacklight -10'
 alias tn='ssh -2NfCT4q -D 8080 srv'
 alias trb='ssh -2NfCT4 -L 9050:127.0.0.1:9050 srv'
 alias dm='sudo dmesg -cHw'
-alias bw='wget http://test-debit.free.fr/image.iso -O /dev/null'
+alias bwf='wget http://test-debit.free.fr/image.iso -O /dev/null'
+alias bw='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
 alias sv='sudo vim -O'
 alias saveroot='sudo fsarchiver savefs -j 4 -A /media/data/info/os/sys-`date +%F`.fsa /dev/disk/by-label/root_ssd'
 alias adup='sudo wget -q https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts -O /etc/dnsmasq.hosts && sudo service dnsmasq force-reload'
@@ -119,7 +120,7 @@ function un () {
 }
 
 function cz () {
-  tar -I pigz -cf "`basename $1`.tar.gz" $1
+  tar -I pigz -cf "`basename $1`.tar.gz" $*
 }
 
 function databackup () {
@@ -187,7 +188,8 @@ function servethis() {
 }
 
 function re() {
-  sudo ifconfig $1 down; sudo ifconfig $1 up
+  iface=$1
+  sudo ifconfig $iface down; sudo ip addr flush dev $iface; sudo pkill dhclient; sudo dhclient -v $iface
 }
 
 function gsr() { # git search and replace recursively in text file
@@ -200,10 +202,12 @@ function gc() {
   git clone --recurse-submodules -j8 "$1" && cd "$(basename "$1" .git)"
 }
 
-function vs() {
-  strings "$1" | vim -R -
-}
-
 function d() {
 	wget -c "$1"
+}
+
+function fgg () {
+	where=$1
+	pattern=$2
+	find -type f -iname "*$where*" -or -type d -iname "*$pattern*" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$pattern"
 }
