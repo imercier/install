@@ -60,7 +60,6 @@ alias sv='sudo vim -O'
 alias saveroot='sudo fsarchiver savefs -j 4 -A /media/data/info/os/sys-`date +%F`.fsa /dev/disk/by-label/root_ssd'
 alias adup='sudo wget -q https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts -O /etc/dnsmasq.hosts && sudo service dnsmasq force-reload'
 alias sudo='sudo '
-alias data2srv='duplicity /media/data/doc/ --exclude /media/data/doc/doc_old --exclude /media/data/doc/etudes/ --exclude /media/data/doc/job/ scp://srv/backup'
 alias n='sudo netstat -lptnu'
 alias vm='VBoxManage startvm win7 --type headless'
 alias si='sudo ifconfig'
@@ -70,6 +69,7 @@ alias pt='ping -c1 google.de'
 alias xr='xrandr --output HDMI-1 --same-as eDP-1 --output eDP-1 --mode 1920x1080'
 alias cc='sync; echo 3 | sudo tee /proc/sys/vm/drop_caches'
 alias dds='sudo pkill -USR1 dd'
+alias du='du -sh'
 
 function PushDateUtc() {
   ssh $1 date -us @`( date -u +"%s" )`
@@ -129,7 +129,7 @@ function databackup () {
     sudo umount /media/backup
   }
   #trap exit_backup INT
-  sudo fsck -y /dev/disk/by-label/data_backup
+  sudo fsck -y /dev/disk/by-label/data2ToExt4
   sudo mount /media/backup &&\
     rsync -av --info=progress2 --exclude 'lost+found' --exclude '.Trash-*' --delete-after /media/data/ /media/backup/ &&\
     sync &&\
@@ -210,4 +210,12 @@ function fgg () {
 	where=$1
 	pattern=$2
 	find -type f -iname "*$where*" -or -type d -iname "*$pattern*" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$pattern"
+}
+
+function data2srv() {
+  S3M="/dev/shm/s3-drive"
+  mkdir "$S3M"
+  s3fs duplicity-backup "$S3M" -o uid=1000,gid=1000,umask=0007,url=https://s3-eu-west-3.amazonaws.com &&
+  duplicity /media/data/doc/ --exclude /media/data/doc/job/ file://"$S3M"
+  fusermount -u "$S3M"
 }
