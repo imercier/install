@@ -105,4 +105,3 @@ if [ -n "$DISPLAY" ]; then
 fi
 
 PATH=$PATH:"$HOME"/bin:"$HOME"/sbin
-PATH=$PATH:/home/ivan/tools/toolchain/bin

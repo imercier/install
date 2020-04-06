@@ -129,7 +129,8 @@ function databackup () {
     sudo umount /media/backup
   }
   #trap exit_backup INT
-  sudo fsck -y /dev/disk/by-label/data2ToExt4
+  sudo umount /media/backup
+  sudo fsck -y /dev/disk/by-label/data_backup
   sudo mount /media/backup &&\
     rsync -av --info=progress2 --exclude 'lost+found' --exclude '.Trash-*' --delete-after /media/data/ /media/backup/ &&\
     sync &&\
@@ -216,6 +217,17 @@ function data2srv() {
   S3M="/dev/shm/s3-drive"
   mkdir "$S3M"
   s3fs duplicity-backup "$S3M" -o uid=1000,gid=1000,umask=0007,url=https://s3-eu-west-3.amazonaws.com &&
-  duplicity /media/data/doc/ --exclude /media/data/doc/job/ file://"$S3M"
+  duplicity -vn /media/data/doc/ --exclude /media/data/doc/job/ file://"$S3M"
   fusermount -u "$S3M"
 }
+
+function createCryptPart() {
+  PARTITION="$1"
+  LABEL="$2"
+  sudo cryptsetup luksFormat "$PARTITION" --label="$LABEL"
+  sudo cryptsetup luksOpen "$PARTITION" "$LABEL"
+  sudo mkfs.ext4 -L "$LABEL" /dev/mapper/"$LABEL"
+  sudo tune2fs -m0 /dev/disk/by-label/"$LABEL"
+  sudo cryptsetup luksClose "$LABEL"
+}
+
