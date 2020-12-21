@@ -12,7 +12,6 @@ alias l='ls -lah --color'
 alias sl='sudo ls -lah --color'
 alias ll='ls -lah --color'
 alias lsbig='find . -type f -print0 | xargs -0 du -h | sort -rh | head -n 10'
-alias lslast='find "$1" -type f -print0 | xargs -0 stat --format=%Y:%y" "%n | sort -nr | cut -d: -f2- | head'
 alias h='htop'
 alias df='df -h'
 alias grep='grep --color'
@@ -228,4 +227,7 @@ function createCryptPart() {
   sudo mkfs.ext4 -L "$LABEL" /dev/mapper/"$LABEL"
   sudo tune2fs -m0 /dev/disk/by-label/"$LABEL"
   sudo cryptsetup luksClose "$LABEL"
+}
+function lslast() {
+  find -type f -print0 | xargs -0 stat --format='%Y :%y %n' | sort -nr | cut -d: -f2- | head
 }
