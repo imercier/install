@@ -2,7 +2,7 @@
 
 echo "
 Have internet?
-R U sudoer?
+Are you sudoer?
 Press [Enter]"
 
 read foo

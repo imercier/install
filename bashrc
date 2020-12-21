@@ -104,4 +104,4 @@ if [ -n "$DISPLAY" ]; then
   xset b off
 fi
 
-PATH=$PATH:"$HOME"/bin:"$HOME"/sbin
+PATH=$PATH:"$HOME"/bin
