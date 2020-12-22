@@ -228,6 +228,13 @@ function createCryptPart() {
   sudo tune2fs -m0 /dev/disk/by-label/"$LABEL"
   sudo cryptsetup luksClose "$LABEL"
 }
+
 function lslast() {
   find -type f -print0 | xargs -0 stat --format='%Y :%y %n' | sort -nr | cut -d: -f2- | head
+}
+
+function pdlight() {
+  ORIGFILE="$1"
+  NEWFILE="${ORIGFILE%.*}-light.pdf"
+  /usr/bin/gs -sDEVICE=pdfwrite -dPDFSETTINGS=/ebook -q -o "$NEWFILE" "$ORIGFILE"
 }
