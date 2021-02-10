@@ -62,6 +62,7 @@ alias cc='sync; echo 3 | sudo tee /proc/sys/vm/drop_caches'
 alias dds='sudo pkill -USR1 dd'
 alias du='du -sh'
 alias xc='xclip -sel c <'
+alias tap='arecord -f S16_LE -c1 -r22050 -t raw | oggenc - -r -C 1 -R 22050 -o ~/tmp/rec_$(date +%Y-%m-%d_%H:%M:%S).ogg'
 
 function PushDateUtc() {
   ssh "$1" date -us @`( date -u +"%s" )`
@@ -71,12 +72,20 @@ function mkc() {
   mkdir -p "$1" && cd "$1"
 }
 
-function vd() {
+function vdb() {
   vimdiff <(xxd "$1") <(xxd "$2")
+}
+
+function vds() {
+  vimdiff <(sort "$1") <(sort "$2")
 }
 
 function g() {
   x-www-browser "http://google.com/search?q=$*" > /dev/null 2>&1 &
+}
+
+function gus() {
+  x-www-browser "http://google.com/search?gl=us&hl=en&q=$*" > /dev/null 2>&1 &
 }
 
 function debchange () {
@@ -84,7 +93,7 @@ function debchange () {
 }
 
 function f () {
-find -type f -iname "*$**" -or -type d -iname "*$**" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$*"
+  find -type f -iname "*$**" -or -type d -iname "*$**" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$*"
 }
 
 function un () {
@@ -113,30 +122,6 @@ function un () {
 
 function cz () {
   tar -I pigz -cf "`basename "$1"`.tar.gz" "$*"
-}
-
-function databackup () {
-  function exit_backup() {
-    echo "** Trapped CTRL-C"
-    sudo umount /media/backup
-  }
-  #trap exit_backup INT
-  if grep "/media/user/DataCrypt" /proc/mounts > /dev/null; then
-    sudo umount /media/backup
-    sudo cryptsetup luksOpen /dev/sda1 2ToCryptBackup &&\
-    sudo fsck -y /dev/disk/by-label/2ToCryptBackup &&\
-    sudo mount /media/backup &&\
-      rsync -av --info=progress2 --exclude 'lost+found' --exclude '.Trash-*' --delete-after /media/user/DataCrypt/ /media/backup/ &&\
-      sync &&\
-      sudo umount /media/backup &&\
-      sudo cryptsetup luksClose 2ToCryptBackup
-  else
-    echo "DataCrypt not mounted"
-  fi
-}
-
-function srvsave () {
-  rsync --delete-after --rsync-path="sudo rsync" -aAX --info=progress2 --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} srv.sav:/ /media/user/DataCrypt/info/os/srv-backup
 }
 
 function kc () {
@@ -181,7 +166,7 @@ function ipfwd() {
 }
 
 function servethis() {
-  IP=$(ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print "$2"}' | cut -f1  -d'/')
+  IP=$(hostname -I | cut -f 1 -d " ")
   echo "http://$IP:8000"
   python3 -m http.server
 }
@@ -192,9 +177,9 @@ function re() {
 }
 
 function gsr() { # git search and replace recursively in text file
-	old=$1
-	new=$2
-	git grep -I -l "$old" | xargs sed -i s@"$old"@"$new"@g
+  old=$1
+  new=$2
+  git grep -I -l "$old" | xargs sed -i s@"$old"@"$new"@g
 }
 
 function gc() {
@@ -202,21 +187,13 @@ function gc() {
 }
 
 function d() {
-	wget -c "$1"
+  wget -c "$1"
 }
 
 function fgg () {
-	where=$1
-	pattern=$2
-	find -type f -iname "*$where*" -or -type d -iname "*$pattern*" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$pattern"
-}
-
-function data2srv() {
-  S3M="/dev/shm/s3-drive"
-  mkdir "$S3M"
-  s3fs duplicity-backup "$S3M" -o uid=1000,gid=1000,umask=0007,url=https://s3-eu-west-3.amazonaws.com &&
-  duplicity -vn /media/user/DataCrypt/doc/ --exclude /media/user/DataCrypt/doc/job/ file://"$S3M"
-  fusermount -u "$S3M"
+  where=$1
+  pattern=$2
+  find -type f -iname "*$where*" -or -type d -iname "*$pattern*" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$pattern"
 }
 
 function createCryptPart() {
@@ -237,4 +214,9 @@ function pdlight() {
   ORIGFILE="$1"
   NEWFILE="${ORIGFILE%.*}-light.pdf"
   /usr/bin/gs -sDEVICE=pdfwrite -dPDFSETTINGS=/ebook -q -o "$NEWFILE" "$ORIGFILE"
+}
+
+function shadir() {
+  [[ -z "$1" ]] && DIR=$PWD || DIR=$(realpath $1)
+  find "$DIR" -type f -print0 | sort -z | xargs -0 shasum | shasum | head -c 40
 }
