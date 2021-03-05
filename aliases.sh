@@ -36,7 +36,7 @@ alias gf='git fetch --all -p'
 alias t='tree -Ca -I ".git*" --noreport'
 alias st='sudo tree -Ca -I ".git*" --noreport'
 alias pd='qpdfview > /dev/null 2>&1'
-alias beep='aplay -q /usr/share/orage/sounds/Spo.wav > /dev/null 2>&1'
+alias beep='aplay -q /usr/share/sounds/sound-icons/canary-long.wav > /dev/null 2>&1'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -63,6 +63,8 @@ alias dds='sudo pkill -USR1 dd'
 alias du='du -sh'
 alias xc='xclip -sel c <'
 alias tap='arecord -f S16_LE -c1 -r22050 -t raw | oggenc - -r -C 1 -R 22050 -o ~/tmp/rec_$(date +%Y-%m-%d_%H:%M:%S).ogg'
+alias xp='xclip -selection clipboard -o >'
+alias jf='python3 -m json.tool'
 
 function PushDateUtc() {
   ssh "$1" date -us @`( date -u +"%s" )`
@@ -177,9 +179,15 @@ function re() {
 }
 
 function gsr() { # git search and replace recursively in text file
+<<<<<<< HEAD
   old=$1
   new=$2
   git grep -I -l "$old" | xargs sed -i s@"$old"@"$new"@g
+=======
+	old=$1
+	new=$2
+	git grep -I -l "$old" | xargs sed -i s@"$old"@"$new"@g # FIXME with special characters
+>>>>>>> Add aliases, more packages
 }
 
 function gc() {
@@ -219,4 +227,34 @@ function pdlight() {
 function shadir() {
   [[ -z "$1" ]] && DIR=$PWD || DIR=$(realpath $1)
   find "$DIR" -type f -print0 | sort -z | xargs -0 shasum | shasum | head -c 40
+
+function timestamp() {
+    eval $(printf "%q " "$@")| ts '[%Y-%m-%d %H:%M:%S]'
+}
+
+function usbfat() {
+  DEV="$1"
+  if grep "$DEV" /proc/mounts > /dev/null; then
+    echo "Already mount"
+    return
+  else
+  set -e
+  sudo parted "$DEV" --script -- mklabel msdos
+  sudo parted "$DEV" --script -- mkpart primary fat32 0% 100%
+  sudo mkfs.vfat -n "MYFAT" "$DEV"1
+  set +e
+  fi
+}
+
+function s3publish() {
+  FILEWITHPATH=$1
+  FILENAME=$(basename $FILEWITHPATH)
+  EXPIREDAYS=$(( 3 * 24 * 3600 ))
+  if [[ -z "$BUCKET" ]]
+  then
+    echo "Youn need to set upload bucket to BUCKET env var"
+    return
+  fi
+  aws s3 cp "$FILEWITHPATH" s3://$BUCKET && \
+  aws s3 presign s3://$BUCKET/$FILENAME --expires $EXPIREDAYS
 }
