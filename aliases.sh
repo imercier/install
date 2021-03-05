@@ -179,15 +179,9 @@ function re() {
 }
 
 function gsr() { # git search and replace recursively in text file
-<<<<<<< HEAD
-  old=$1
-  new=$2
-  git grep -I -l "$old" | xargs sed -i s@"$old"@"$new"@g
-=======
 	old=$1
 	new=$2
 	git grep -I -l "$old" | xargs sed -i s@"$old"@"$new"@g # FIXME with special characters
->>>>>>> Add aliases, more packages
 }
 
 function gc() {
@@ -227,6 +221,7 @@ function pdlight() {
 function shadir() {
   [[ -z "$1" ]] && DIR=$PWD || DIR=$(realpath $1)
   find "$DIR" -type f -print0 | sort -z | xargs -0 shasum | shasum | head -c 40
+}
 
 function timestamp() {
     eval $(printf "%q " "$@")| ts '[%Y-%m-%d %H:%M:%S]'
