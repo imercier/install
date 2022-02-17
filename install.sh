@@ -10,7 +10,7 @@ read foo
 
 PWD=`pwd`
 
-sudo apt-get -y install $(cat pkg-srv.list)
+sudo apt-get -qq -y install $(cat pkg-srv.list)
 
 if [ ! -z "$DISPLAY" ]
 then

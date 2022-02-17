@@ -104,4 +104,8 @@ if [ -n "$DISPLAY" ]; then
   xset b off
 fi
 
-PATH=$PATH:"$HOME"/bin
+PATH=$PATH:"$HOME"/bin:"$HOME"/.local/bin
+
+complete -C aws_completer aws
+complete -C terraform terraform
+export AWS_DEFAULT_REGION=eu-west-1

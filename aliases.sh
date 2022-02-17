@@ -11,7 +11,7 @@ alias m='mount | column -t'
 alias l='ls -lah --color'
 alias sl='sudo ls -lah --color'
 alias ll='ls -lah --color'
-alias lsbig='find . -type f -print0 | xargs -0 du -h | sort -rh | head -n 10'
+alias lsbig='find . -type f -print0 | xargs -0 du -h | sort -rh | head -n 50'
 alias h='htop'
 alias df='df -h'
 alias grep='grep --color'
@@ -33,6 +33,7 @@ alias gg='git grep -i'
 alias gcp='git cherry-pick'
 alias gr='git remote -v'
 alias gf='git fetch --all -p'
+#alias gt='git log --tags --simplify-by-decoration --pretty='format:%ci %d'
 alias t='tree -Ca -I ".git*" --noreport'
 alias st='sudo tree -Ca -I ".git*" --noreport'
 alias pd='qpdfview > /dev/null 2>&1'
@@ -64,7 +65,9 @@ alias du='du -sh'
 alias xc='xclip -sel c <'
 alias tap='arecord -f S16_LE -c1 -r22050 -t raw | oggenc - -r -C 1 -R 22050 -o ~/tmp/rec_$(date +%Y-%m-%d_%H:%M:%S).ogg'
 alias xp='xclip -selection clipboard -o >'
-alias jf='python3 -m json.tool'
+alias jj='python3 -m json.tool'
+alias va='vim -O $HOME/.aws/config'
+alias dc='docker rm $(docker ps -a -f status=exited -q); docker volume prune -f'
 
 function PushDateUtc() {
   ssh "$1" date -us @`( date -u +"%s" )`
@@ -168,9 +171,16 @@ function ipfwd() {
 }
 
 function servethis() {
+  PORT=$1
   IP=$(hostname -I | cut -f 1 -d " ")
-  echo "http://$IP:8000"
-  python3 -m http.server
+  if [[ -z "$PORT" ]]
+  then
+    echo "http://$IP:8000"
+    python3 -m http.server
+  else
+    echo "http://$IP:$PORT"
+    python3 -m http.server $PORT
+  fi
 }
 
 function re() {
@@ -244,12 +254,29 @@ function usbfat() {
 function s3publish() {
   FILEWITHPATH=$1
   FILENAME=$(basename $FILEWITHPATH)
-  EXPIREDAYS=$(( 3 * 24 * 3600 ))
-  if [[ -z "$BUCKET" ]]
-  then
-    echo "Youn need to set upload bucket to BUCKET env var"
-    return
-  fi
-  aws s3 cp "$FILEWITHPATH" s3://$BUCKET && \
-  aws s3 presign s3://$BUCKET/$FILENAME --expires $EXPIREDAYS
+  EXPIREDAY=7
+  EXPIRESEC=$(( $EXPIREDAY * 24 * 3600 ))
+  PASSWORD=$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c10)
+  export AWS_PROFILE=cma_sandbox_poweruser
+  BUCKET="s3://mi-share"
+  ARCHIVEDIR="/tmp"
+  ARCHIVENAME=$FILENAME.zip
+  ARCHIVE=$ARCHIVEDIR/$ARCHIVENAME
+  zip -q -r -P $PASSWORD $ARCHIVE $FILEWITHPATH && \
+  aws s3 --only-show-errors cp $ARCHIVE $BUCKET && \
+  aws s3 presign $BUCKET/$ARCHIVENAME --expires $EXPIRESEC && \
+  echo "Archive password: \"$PASSWORD\", available $EXPIREDAY days"
+  rm -f $ARCHIVE 2>/dev/null
+}
+
+function rd() {
+  curl -s "http://127.0.0.1:13007$1" | jq
+}
+
+function ap() {
+  export AWS_DEFAULT_PROFILE=$1
+}
+
+function jwtd() {
+  jq -R 'split(".") | .[0],.[1] | @base64d | fromjson' <<< "$1"
 }
