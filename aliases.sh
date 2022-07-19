@@ -46,8 +46,8 @@ alias br='break_reboot /dev/ttyUSB0; break_reboot /dev/ttyUSB1'
 alias s='sudo !!'
 alias xp='xbacklight +10'
 alias xm='xbacklight -10'
-alias tn='ssh -2NfCT4q -D 8080 srv'
-alias trb='ssh -2NfCT4 -L 9050:127.0.0.1:9050 srv'
+alias tn='ssh -2NfCT4q -D 8080 vm'
+alias trb='ssh -2NfCT4 -L 9050:127.0.0.1:9050 vm'
 alias dm='sudo dmesg -cHw'
 alias bwf='wget http://test-debit.free.fr/image.iso -O /dev/null'
 alias bw='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
@@ -211,7 +211,7 @@ function fgg () {
 function createCryptPart() {
   PARTITION="$1"
   LABEL="$2"
-  sudo cryptsetup luksFormat "$PARTITION" --label="$LABEL"
+  sudo cryptsetup -q luksFormat "$PARTITION" --label="$LABEL"
   sudo cryptsetup luksOpen "$PARTITION" "$LABEL"
   sudo mkfs.ext4 -L "$LABEL" /dev/mapper/"$LABEL"
   sudo tune2fs -m0 /dev/disk/by-label/"$LABEL"
@@ -279,4 +279,8 @@ function ap() {
 
 function jwtd() {
   jq -R 'split(".") | .[0],.[1] | @base64d | fromjson' <<< "$1"
+}
+
+function afd() {
+  aws sts decode-authorization-message --encoded-message "$1" --query DecodedMessage --output text | jq '.'
 }
