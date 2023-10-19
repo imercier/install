@@ -11,7 +11,7 @@ alias m='mount | column -t'
 alias l='ls -lah --color'
 alias sl='sudo ls -lah --color'
 alias ll='ls -lah --color'
-alias lsbig='find . -type f -print0 | xargs -0 du -h | sort -rh | head -n 20'
+alias lsbig='find . -type f -print0 | xargs -0 du -h | sort -rh | head -n 30'
 alias h='htop'
 alias df='df -h'
 alias grep='grep --color'
@@ -46,7 +46,7 @@ alias br='break_reboot /dev/ttyUSB0; break_reboot /dev/ttyUSB1'
 alias s='sudo !!'
 alias xp='xbacklight +10'
 alias xm='xbacklight -10'
-alias tn='ssh -2NfCT4q -D 8080 vm'
+alias tn='ssh -2NfCT4q -D 8080 oraclevm'
 alias trb='ssh -2NfCT4 -L 9050:127.0.0.1:9050 vm'
 alias dm='sudo dmesg -cHw'
 alias bwf='wget http://test-debit.free.fr/image.iso -O /dev/null'
@@ -101,6 +101,10 @@ function f () {
   find -type f -iname "*$**" -or -type d -iname "*$**" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$*"
 }
 
+function fd () {
+  find -type d -iname "*$**" -or -type d -iname "*$**" -and -not -path "*.git*" 2>/dev/null | egrep -i --color "$*"
+}
+
 function un () {
   if [ -f "$1" ] ; then
     case "$1" in
@@ -110,7 +114,7 @@ function un () {
       *.tgz)    	 tar -I pigz -xf "$1"     ;;
       *.bz2)       pbzip2 -d "$1"   ;;
       *.rar)       unrar e "$1"     ;;
-      *.gz)        gunzip "$1"      ;;
+      *.gz)        unpigz "$1"      ;;
       *.tar)       tar xf "$1"      ;;
       *.tbz2)      tar xjf "$1"     ;;
       *.zip)       unzip "$1"       ;;
@@ -283,4 +287,11 @@ function jwtd() {
 
 function afd() {
   aws sts decode-authorization-message --encoded-message "$1" --query DecodedMessage --output text | jq '.'
+}
+
+
+function adup() {
+  sudo wget -q https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts -O /etc/dnsmasq.hosts
+  sudo wget -q https://github.com/notracking/hosts-blocklists/raw/master/dnsmasq/dnsmasq.blacklist.txt -O /etc/dnsmasq.more.conf
+  sudo service dnsmasq force-reload
 }
